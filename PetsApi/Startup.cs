@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using PetsApi.Data;
 using PetsApi.Helpers;
+using PetsApi.Middlewares;
 using PetsApi.Services;
 using System;
 using System.Collections.Generic;
@@ -61,12 +62,14 @@ namespace PetsApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PetsApi v1"));
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PetsApi v1"));
+            //}
+
+            app.UseMiddleware<ApiExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
