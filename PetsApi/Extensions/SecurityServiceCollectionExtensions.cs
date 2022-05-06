@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace PetsApi.Extensions
 {
-    public class SecurityServiceCollectionExtensions
+    public static class SecurityServiceCollectionExtensions
     {
+        public static IServiceCollection AddSecurityServices(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins", policy =>
+                {
+                    policy.AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
+
+            return services;
+        }
     }
 }

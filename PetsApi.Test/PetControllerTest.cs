@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using Moq;
 using PetsApi.Controllers;
 using PetsApi.Models;
@@ -25,7 +26,7 @@ namespace PetsApi.Test
         [Fact]
         public async Task GetPetById_ShouldReturnAPet_WhenPetExist()
         {
-            var petId = Guid.NewGuid().ToString();
+            var petId = ObjectId.GenerateNewId().ToString();
             var petName = "Coco";
             var breed = "srd";
             var animalType = "dog";
@@ -62,11 +63,12 @@ namespace PetsApi.Test
         [Fact]
         public async Task GetPetById_ShouldReturnNotFound_WhenReceivedPetNotExist()
         {
+            var routeId = ObjectId.GenerateNewId().ToString();
 
-            _petServiceMock.Setup(x => x.GetByIdAsync(It.IsAny<string>()))
+            _petServiceMock.Setup(x => x.GetByIdAsync(routeId))
                 .ReturnsAsync(() => null);
 
-            var petResult = await _petController.GetPetById(Guid.NewGuid().ToString());
+            var petResult = await _petController.GetPetById(routeId);
 
             Assert.IsType<NotFoundResult>(petResult.Result);
         }
@@ -74,9 +76,9 @@ namespace PetsApi.Test
         [Fact]
         public async Task UpdatePet_ShouldReturnNotFound_WhenRouteIdIsDifferentToPetId()
         {
-            var routeId = Guid.NewGuid().ToString();
-            
-            var petId = Guid.NewGuid().ToString();
+            var routeId = ObjectId.GenerateNewId().ToString();
+
+            var petId = ObjectId.GenerateNewId().ToString();
             var petName = "Coco";
             var breed = "srd";
             var animalType = "dog";
@@ -110,7 +112,7 @@ namespace PetsApi.Test
         [Fact]
         public async Task UpdatePet_ShouldReturnNotFound_WhenPetNotExist()
         {
-            var routeId = Guid.NewGuid().ToString();
+            var routeId = ObjectId.GenerateNewId().ToString();
 
             var petId = routeId;
             var petName = "Coco";
@@ -148,7 +150,7 @@ namespace PetsApi.Test
         [Fact]
         public async Task UpdatePet_ShouldReturnNoContent_WhenPetExistAndIsUpdated()
         {
-            var routeId = Guid.NewGuid().ToString();
+            var routeId = ObjectId.GenerateNewId().ToString();
 
             var petId = routeId;
             var petName = "Coco";
@@ -188,7 +190,7 @@ namespace PetsApi.Test
         public async Task DeletePet_ShouldReturnBadRequest_WhenPetNotExist()
         {
 
-            var routeId = Guid.NewGuid().ToString();
+            var routeId = ObjectId.GenerateNewId().ToString();
 
             _petServiceMock.Setup(x => x.GetByIdAsync(routeId)).ReturnsAsync(() => null);
 
@@ -200,7 +202,7 @@ namespace PetsApi.Test
         [Fact]
         public async Task DeletePet_ShouldReturnNoContent_WhenPetExist()
         {
-            var routeId = Guid.NewGuid().ToString();
+            var routeId = ObjectId.GenerateNewId().ToString();
 
             _petServiceMock.Setup(x => x.GetByIdAsync(routeId)).ReturnsAsync(new Pet { Id = routeId});
 

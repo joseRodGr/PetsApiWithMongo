@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using PetsApi.Dtos;
 using PetsApi.Models;
 using PetsApi.Services;
@@ -43,13 +44,11 @@ namespace PetsApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Pet>> CreatePet(CreatePetDto createPet)
         {
-
             var pet = _mapper.Map<Pet>(createPet);
 
             await _petService.CreateAsync(pet);
 
             return CreatedAtRoute("GetPet", new { id = pet.Id }, pet);
-
         }
 
         [HttpPut("{id}")]
@@ -77,5 +76,6 @@ namespace PetsApi.Controllers
 
             return NoContent();
         }
+
     }
 }
